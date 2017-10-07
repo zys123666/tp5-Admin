@@ -1,0 +1,120 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__ROOT__/lib/html5shiv.js"></script>
+<script type="text/javascript" src="__ROOT__/lib/respond.min.js"></script>
+<![endif]-->
+<link href="__ROOT__/static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__ROOT__/static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+<link href="__ROOT__/static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__ROOT__/lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="__ROOT__/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>后台登录 - H-ui.admin v3.1</title>
+<meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+<body>
+<input type="hidden" id="TenantId" name="TenantId" value="" />
+<div class="header"></div>
+<div class="loginWraper">
+  <div id="loginform" class="loginBox">
+    <form class="form form-horizontal" action="index.html" method="post">
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+        <div class="formControls col-xs-8">
+          <input id="username" name="username" type="text" placeholder="账户" class="input-text size-L">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+        <div class="formControls col-xs-8">
+          <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input id="checkCode" name="checkCode" class="input-text size-L" type="text" placeholder="验证码" value="" style="width:225px;">
+          <img id="imgVerify" style="cursor: pointer" src="<{:url('admin/admin/vertify')}>" onclick="fleshVerify()"></div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <label for="online">
+            <input type="checkbox" name="online" id="online" value="">
+            使我保持登录状态</label>
+        </div>
+      </div>
+    </form>
+    <div class="row cl">
+      <div class="formControls col-xs-8 col-xs-offset-3">
+        <button name="" type="submit" class="btn btn-success radius size-L" onclick="checkLogin()">&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;</button>
+        <button name="" type="reset" class="btn btn-default radius size-L" >&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer">Copyright 你的公司名称 by H-ui.admin v3.1</div>
+<script type="text/javascript" src="__ROOT__/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/lib/layer/2.4/layer.js"></script>
+</body>
+<script>
+    function fleshVerify(){
+        //重载验证码
+        $('#imgVerify').attr('src',"");
+        $('#imgVerify').attr('src','__ROOT__/index.php/Admin/admin/vertify/r='+Math.floor(Math.random()*100));
+    }
+</script>
+<script>
+    function checkLogin(){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var checkCode = $('#checkCode').val();
+        if( username == '' || password ==''){
+            layer.alert('用户名或密码不能为空', {icon: 2}); //alert('用户名或密码不能为空');
+            return;
+        }
+        if(checkCode ==''){
+            layer.alert('验证码不能为空', {icon: 2});
+            return;
+        }
+        if(checkCode.length !=4){
+            layer.alert('验证码错误', {icon: 2});
+            //fleshVerify();
+            return;
+        }
+
+        $.ajax({
+            url:'__ROOT__/index.php/Admin/Index/login',
+            type:'post',
+            dataType:'json',
+            data:{username:username,password:password,checkCode:checkCode},
+            success:function(res){
+                if(res.status==1){
+                    top.location.href = res.url;
+                }else{
+                    layer.alert(res.msg, {icon: 2});
+                }
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                layer.alert('网络失败，请刷新页面后重试', {icon: 2});
+            }
+        })
+    }
+
+    document.onkeydown=function(event){
+        e = event ? event :(window.event ? window.event : null);
+        if(e.keyCode==13){
+            checkLogin();
+        }
+    }
+</script>
+</html>

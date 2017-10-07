@@ -1,0 +1,19 @@
+<aside class="Hui-aside">
+	<div class="menu_dropdown bk_2">
+		{foreach name="menu_list" item="vo" key="mk" }
+		{notempty name="vo.sub_menu"}
+		<dl id="menu-<{$mk}>">
+			<dt><i class="Hui-iconfont">&#xe616;</i> <{$vo.name}><i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					{foreach name="vo.sub_menu" item="vv" key="kk"}
+					<li><a data-href='<{:url("$vv[control]/$vv[act]")}>' data-title="资讯管理" href="javascript:void(0)"><{$vv['name']}></a></li>
+					{/foreach}
+				</ul>
+			</dd>
+		</dl>
+		{/notempty}
+		{/foreach}
+	</div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
